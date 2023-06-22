@@ -1,6 +1,7 @@
 import csv
+from pathlib import Path
 
-FILE_PATH = 'D:\\Study\\DZ\\electronics-shop-project\\src\\items.csv'
+FILE_PATH = Path.cwd().parent / 'src' / 'items.csv'
 
 
 class Item:
