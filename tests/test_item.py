@@ -28,10 +28,18 @@ def item():
     return item
 
 
-def test_item(item1):
+def test_init_item(item1):
     assert item1.name == 'Смартфон'
     assert item1.price == 10000
     assert item1.quantity == 20
+
+
+def test_repr_item(item3):
+    assert repr(item3) == "Item('Кабель', 10, 5)"
+
+
+def test_str_item(item3):
+    assert str(item3) == 'Кабель'
 
 
 def test_property_setter_name(item):
