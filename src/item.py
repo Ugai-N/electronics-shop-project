@@ -1,7 +1,7 @@
 import csv
 from pathlib import Path
 
-FILE_PATH = Path.cwd().parent / 'src' / 'items.csv'
+FILE_PATH = Path(__file__).resolve().parent / 'items.csv'
 
 
 class Item:
@@ -26,17 +26,24 @@ class Item:
         Item.all.append(self)
 
     def __repr__(self):
+        """Возвращает инфо в формате 'Item(<name>, <price>, <quantity>)'"""
         return f"{self.__class__.__name__}({self.__name!r}, {self.price}, {self.quantity})"
 
     def __str__(self):
+        """Возвращает название товара"""
         return self.__name
 
     @property
     def name(self):
+        """Геттер для вызова приватного атрибута <name>"""
         return self.__name
 
     @name.setter
     def name(self, name):
+        """
+        Setter для <name>: проверяет, что значение - строка не более 10 символов.
+        Если больше - выводит первые 10 символов
+        """
         if isinstance(name, str) and len(name) <= 10:
             self.__name = name
         elif isinstance(name, str) and len(name) > 10:
@@ -60,6 +67,9 @@ class Item:
 
     @classmethod
     def instantiate_from_csv(cls):
+        """
+        Класс-метод, инициализирующий экземпляры класса Item данными из файла src/items.csv
+        """
         Item.all.clear()
         with open(FILE_PATH, newline='') as f:
             reader = csv.DictReader(f)
@@ -71,6 +81,9 @@ class Item:
 
     @staticmethod
     def string_to_number(string):
+        """
+        Статический метод, возвращающий число из числа-строки
+        """
         if string.isdigit():
             return int(string)
         else:
@@ -79,3 +92,13 @@ class Item:
                 return int(float(string))
             except ValueError:
                 raise ValueError
+
+    def __add__(self, other):
+        """
+        Магический метод, возвращающий суммарное кол-во товара self и other в магазине,
+        сложение между экземплярами Phone или Item классов
+        """
+        if isinstance(other, Item):
+            return self.quantity + other.quantity
+        else:
+            raise ValueError
