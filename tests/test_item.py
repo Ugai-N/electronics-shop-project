@@ -4,30 +4,6 @@ import pytest
 from src.item import Item
 
 
-@pytest.fixture
-def item1():
-    item1 = Item("Смартфон", 10000, 20)
-    return item1
-
-
-@pytest.fixture
-def item2():
-    item2 = Item("Ноутбук", 20000, 5)
-    return item2
-
-
-@pytest.fixture
-def item3():
-    item3 = Item("Кабель", 10, 5)
-    return item3
-
-
-@pytest.fixture
-def item():
-    item = Item('Телефон', 10000, 5)
-    return item
-
-
 def test_init_item(item1):
     assert item1.name == 'Смартфон'
     assert item1.price == 10000
@@ -49,7 +25,7 @@ def test_property_setter_name(item):
     assert item.name == "СуперСмарт"
     item.name = '123'
     assert item.name == '123'
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match='Некорректное название'):
         item.name = 123
 
 
@@ -83,3 +59,14 @@ def test_string_to_number():
     assert Item.string_to_number('5.5') == 5
     with pytest.raises(ValueError):
         Item.string_to_number('abc123')
+
+
+def test_add_item(item1, alien1, phone1):
+    assert item1 + item1 == 40
+    assert item1 + phone1 == 25
+    with pytest.raises(ValueError):
+        item1 + 10
+    with pytest.raises(ValueError):
+        item1 + alien1
+    with pytest.raises(TypeError):
+        alien1 + item1
