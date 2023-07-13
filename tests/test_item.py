@@ -1,7 +1,10 @@
 """Здесь надо написать тесты с использованием pytest для модуля item."""
+import os.path
+from pathlib import Path
+
 import pytest
 
-from src.item import Item
+from src.item import Item, InstantiateCSVError
 
 
 def test_init_item(item1):
@@ -51,6 +54,18 @@ def test_instantiate_from_csv(item3):
     assert Item.all[3].quantity == 5
     assert len(Item.all) == 5
     assert Item.all[0].name == 'Смартфон'
+
+
+def test_no_file():
+    with pytest.raises(FileNotFoundError):
+        file = Path(__file__).resolve().parent / 'itemsdsafvsvz.csv'
+        Item.instantiate_from_csv(file)
+
+
+def test_error_file():
+    with pytest.raises(InstantiateCSVError):
+        file = Path(__file__).resolve().parent / 'test_items.csv'
+        Item.instantiate_from_csv(file)
 
 
 def test_string_to_number():
